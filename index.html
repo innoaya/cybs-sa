@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSource Secure Acceptance Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+
+        .info-box strong {
+            color: #2d3748;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        #paymentForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 CyberSource Secure Acceptance Tester</h1>
+        <p class="subtitle">Test your CyberSource Secure Acceptance integration with ease</p>
+
+        <div class="info-box">
+            <strong>ℹ️ Instructions:</strong><br>
+            Enter your CyberSource credentials below and click "Test Payment" to initiate a test transaction.
+            You will be redirected to the CyberSource payment page if your configuration is correct.
+        </div>
+
+        <form id="configForm">
+            <div class="form-section">
+                <div class="section-title">🔑 CyberSource Credentials</div>
+                
+                <div class="form-group">
+                    <label for="accessKey">Access Key *</label>
+                    <input type="text" id="accessKey" required placeholder="Enter your access key">
+                </div>
+
+                <div class="form-group">
+                    <label for="profileId">Profile ID *</label>
+                    <input type="text" id="profileId" required placeholder="Enter your profile ID">
+                </div>
+
+                <div class="form-group">
+                    <label for="secretKey">Secret Key *</label>
+                    <input type="password" id="secretKey" required placeholder="Enter your secret key">
+                </div>
+
+                <div class="form-group">
+                    <label for="submitUrl">Submit URL *</label>
+                    <select id="submitUrl" required>
+                        <option value="https://testsecureacceptance.cybersource.com/pay">Test Server (testsecureacceptance.cybersource.com)</option>
+                        <option value="https://secureacceptance.cybersource.com/pay">Production Server (secureacceptance.cybersource.com)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">👤 Billing Information</div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="billToForename">First Name *</label>
+                        <input type="text" id="billToForename" required value="Aung">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billToSurname">Last Name *</label>
+                        <input type="text" id="billToSurname" required value="Kyaw Minn">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="billToEmail">Email *</label>
+                    <input type="email" id="billToEmail" required placeholder="customer@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="billToAddressLine1">Address Line 1 *</label>
+                    <input type="text" id="billToAddressLine1" required value="River View Condo">
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="billToCity">City *</label>
+                        <input type="text" id="billToCity" required value="Yangon">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="billToCountry">Country Code *</label>
+                        <input type="text" id="billToCountry" required value="MM" placeholder="MM" maxlength="2">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">💰 Transaction Details</div>
+                
+                <div class="row">
+                    <div class="form-group">
+                        <label for="amount">Amount *</label>
+                        <input type="number" id="amount" required value="100" min="1" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currency">Currency *</label>
+                        <input type="text" id="currency" required value="MMK" placeholder="MMK" maxlength="3">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="transactionType">Transaction Type *</label>
+                    <select id="transactionType" required>
+                        <option value="sale">Sale</option>
+                        <option value="authorization">Authorization</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">🚀 Test Payment</button>
+        </form>
+
+        <div id="result"></div>
+
+        <form id="paymentForm" method="POST">
+            <input type="hidden" name="access_key" id="hidden_access_key">
+            <input type="hidden" name="profile_id" id="hidden_profile_id">
+            <input type="hidden" name="transaction_uuid" id="hidden_transaction_uuid">
+            <input type="hidden" name="signed_field_names" id="hidden_signed_field_names">
+            <input type="hidden" name="unsigned_field_names" id="hidden_unsigned_field_names">
+            <input type="hidden" name="signed_date_time" id="hidden_signed_date_time">
+            <input type="hidden" name="locale" id="hidden_locale">
+            <input type="hidden" name="bill_to_address_line1" id="hidden_bill_to_address_line1">
+            <input type="hidden" name="bill_to_address_city" id="hidden_bill_to_address_city">
+            <input type="hidden" name="bill_to_address_country" id="hidden_bill_to_address_country">
+            <input type="hidden" name="bill_to_email" id="hidden_bill_to_email">
+            <input type="hidden" name="bill_to_forename" id="hidden_bill_to_forename">
+            <input type="hidden" name="bill_to_surname" id="hidden_bill_to_surname">
+            <input type="hidden" name="transaction_type" id="hidden_transaction_type">
+            <input type="hidden" name="reference_number" id="hidden_reference_number">
+            <input type="hidden" name="amount" id="hidden_amount">
+            <input type="hidden" name="currency" id="hidden_currency">
+            <input type="hidden" name="merchant_defined_data3" id="hidden_merchant_defined_data3">
+            <input type="hidden" name="merchant_defined_data4" id="hidden_merchant_defined_data4">
+            <input type="hidden" name="signature" id="hidden_signature">
+        </form>
+    </div>
+
+    <script>
+        async function generateSignature(params, secretKey) {
+            const signedFieldNames = params.signed_field_names.split(',');
+            const dataToSign = signedFieldNames.map(field => `${field}=${params[field]}`).join(',');
+            
+            const encoder = new TextEncoder();
+            const keyData = encoder.encode(secretKey);
+            const messageData = encoder.encode(dataToSign);
+            
+            const cryptoKey = await crypto.subtle.importKey(
+                'raw',
+                keyData,
+                { name: 'HMAC', hash: 'SHA-256' },
+                false,
+                ['sign']
+            );
+            
+            const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+            
+            return btoa(String.fromCharCode(...new Uint8Array(signature)));
+        }
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function getISODateTime() {
+            return new Date().toISOString().slice(0, -5) + 'Z';
+        }
+
+        function showResult(message, isSuccess) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = isSuccess ? 'success' : 'error';
+            resultDiv.style.display = 'block';
+        }
+
+        document.getElementById('configForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                const accessKey = document.getElementById('accessKey').value;
+                const profileId = document.getElementById('profileId').value;
+                const secretKey = document.getElementById('secretKey').value;
+                const submitUrl = document.getElementById('submitUrl').value;
+                
+                const transactionUuid = generateUUID();
+                const signedDateTime = getISODateTime();
+                const referenceNumber = 'TEST-REF-' + Date.now();
+                
+                const signedFieldNames = 'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,bill_to_address_line1,bill_to_address_city,bill_to_address_country,bill_to_email,bill_to_forename,bill_to_surname,transaction_type,reference_number,amount,currency,merchant_defined_data3,merchant_defined_data4';
+                
+                const params = {
+                    access_key: accessKey,
+                    profile_id: profileId,
+                    transaction_uuid: transactionUuid,
+                    signed_field_names: signedFieldNames,
+                    unsigned_field_names: '',
+                    signed_date_time: signedDateTime,
+                    locale: 'en',
+                    bill_to_address_line1: document.getElementById('billToAddressLine1').value,
+                    bill_to_address_city: document.getElementById('billToCity').value,
+                    bill_to_address_country: document.getElementById('billToCountry').value,
+                    bill_to_email: document.getElementById('billToEmail').value,
+                    bill_to_forename: document.getElementById('billToForename').value,
+                    bill_to_surname: document.getElementById('billToSurname').value,
+                    transaction_type: document.getElementById('transactionType').value,
+                    reference_number: referenceNumber,
+                    amount: document.getElementById('amount').value,
+                    currency: document.getElementById('currency').value,
+                    merchant_defined_data3: '',
+                    merchant_defined_data4: ''
+                };
+                
+                const signature = await generateSignature(params, secretKey);
+                
+                const paymentForm = document.getElementById('paymentForm');
+                paymentForm.action = submitUrl;
+                
+                document.getElementById('hidden_access_key').value = params.access_key;
+                document.getElementById('hidden_profile_id').value = params.profile_id;
+                document.getElementById('hidden_transaction_uuid').value = params.transaction_uuid;
+                document.getElementById('hidden_signed_field_names').value = params.signed_field_names;
+                document.getElementById('hidden_unsigned_field_names').value = params.unsigned_field_names;
+                document.getElementById('hidden_signed_date_time').value = params.signed_date_time;
+                document.getElementById('hidden_locale').value = params.locale;
+                document.getElementById('hidden_bill_to_address_line1').value = params.bill_to_address_line1;
+                document.getElementById('hidden_bill_to_address_city').value = params.bill_to_address_city;
+                document.getElementById('hidden_bill_to_address_country').value = params.bill_to_address_country;
+                document.getElementById('hidden_bill_to_email').value = params.bill_to_email;
+                document.getElementById('hidden_bill_to_forename').value = params.bill_to_forename;
+                document.getElementById('hidden_bill_to_surname').value = params.bill_to_surname;
+                document.getElementById('hidden_transaction_type').value = params.transaction_type;
+                document.getElementById('hidden_reference_number').value = params.reference_number;
+                document.getElementById('hidden_amount').value = params.amount;
+                document.getElementById('hidden_currency').value = params.currency;
+                document.getElementById('hidden_merchant_defined_data3').value = params.merchant_defined_data3;
+                document.getElementById('hidden_merchant_defined_data4').value = params.merchant_defined_data4;
+                document.getElementById('hidden_signature').value = signature;
+                
+                showResult('✓ Signature generated successfully! Redirecting to CyberSource...', true);
+                
+                setTimeout(() => {
+                    paymentForm.submit();
+                }, 1000);
+                
+            } catch (error) {
+                showResult('✗ Error: ' + error.message, false);
+            }
+        });
+    </script>
+</body>
+</html>
